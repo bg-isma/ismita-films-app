@@ -64,7 +64,7 @@ class DetailActivity : AppCompatActivity() {
         filmTitleView = findViewById<TextView>(R.id.textView)
         backBtn = findViewById<ImageView>(R.id.imageView4)
         favouriteBtn = findViewById<ImageView>(R.id.imageView5)
-        Glide.with(this).asBitmap().load("https://picsum.photos/200/300").into(filmView)
+        Glide.with(this).asBitmap().load("https://image.tmdb.org/t/p/original${film.backdrop_path}").into(filmView)
         filmTitleView.text = film.title.toUpperCase()
     }
 

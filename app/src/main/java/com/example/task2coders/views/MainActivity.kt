@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         val retrofit = Retrofit.Builder().baseUrl("https://api.themoviedb.org/").addConverterFactory(GsonConverterFactory.create()).build();
         val filmService: FilmService = retrofit.create<FilmService>(FilmService::class.java)
+
         val result: Call<FilmResponse> = filmService.getAllFilms("0da2d6744b7dda175fe4aed86c1bf257");
         result.enqueue(object : Callback<FilmResponse> {
             override fun onFailure(call: Call<FilmResponse>, t: Throwable) {

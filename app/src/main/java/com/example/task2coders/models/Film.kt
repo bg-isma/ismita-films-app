@@ -5,6 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Film (
+    val url: String?,
     val popularity: Double,
     val vote_count : Int,
     val video : Boolean,

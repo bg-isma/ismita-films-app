@@ -21,7 +21,7 @@ class FilmList (
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Glide.with(context).asBitmap().load("https://picsum.photos/200/300").into(holder.filmImg)
+        Glide.with(context).asBitmap().load("https://image.tmdb.org/t/p/original${film[position].backdrop_path}").into(holder.filmImg)
         holder.filmImg.setOnClickListener{ listener(film[position]) }
     }
 
