@@ -6,20 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".views.MainActivity">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="126dp"
-        tools:layout_editor_absoluteY="361dp"
-        android:background="#141414"
-        >
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/app_title"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="#000000"
@@ -30,41 +27,59 @@
                 android:textFontWeight="600"
                 android:textSize="30dp" />
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="60dp">
-
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/top_films_list_title"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
                 android:text="Top España"
                 android:textColor="#ffffff"
                 android:textFontWeight="600"
-                android:textSize="20dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="105dp">
+                android:textSize="20dp" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/filmList"
+                android:id="@+id/top_films_list"
                 android:layout_width="match_parent"
                 android:layout_height="230dp"
                 tools:ignore="MissingConstraints">
 
             </androidx.recyclerview.widget.RecyclerView>
-        </RelativeLayout>
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/romance_films_title"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="Romance"
+                android:textColor="#ffffff"
+                android:textFontWeight="600"
+                android:textSize="20dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/romance_films_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/science_fiction_films_title"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="Science Fiction"
+                android:textColor="#ffffff"
+                android:textFontWeight="600"
+                android:textSize="20dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/science_fiction_films_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

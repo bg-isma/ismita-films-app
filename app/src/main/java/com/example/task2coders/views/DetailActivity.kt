@@ -5,16 +5,16 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteDatabaseLockedException
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.task2coders.R
-import com.example.task2coders.services.SQLConection
-import com.example.task2coders.services.SQLConection.FavTable.TABLE_NAME
+import com.example.task2coders.services.SQLConnection
+import com.example.task2coders.services.SQLConnection.FavTable.TABLE_NAME
 import com.example.task2coders.models.Film
+import kotlinx.android.synthetic.main.layout_film_details.*
 
 
 class DetailActivity : AppCompatActivity() {
@@ -30,7 +30,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_film_details)
 
-        val dbHelper = SQLConection(this)
+        val dbHelper = SQLConnection(this)
         val db = dbHelper.writableDatabase
 
         film = intent.getParcelableExtra<Film>(MainActivity.INTENT_PARCELABLE)
@@ -60,10 +60,10 @@ class DetailActivity : AppCompatActivity() {
     }
 
     fun initViewContent() {
-        filmView = findViewById<ImageView>(R.id.imageView3)
-        filmTitleView = findViewById<TextView>(R.id.textView)
-        backBtn = findViewById<ImageView>(R.id.imageView4)
-        favouriteBtn = findViewById<ImageView>(R.id.imageView5)
+        filmView = background_details_img
+        filmTitleView = film_details_title
+        backBtn = back_to_main_btn
+        favouriteBtn = fav_btn
         Glide.with(this).asBitmap().load("https://image.tmdb.org/t/p/original${film.backdrop_path}").into(filmView)
         filmTitleView.text = film.title.toUpperCase()
     }

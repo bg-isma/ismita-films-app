@@ -5,18 +5,28 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Film (
-    val url: String?,
-    val popularity: Double,
-    val vote_count : Int,
-    val video : Boolean,
-    val poster_path : String,
-    val id : String,
-    val adult : Boolean,
+    val genre_ids: Array<Int>,
     val backdrop_path : String,
-    val original_language : String,
-    val original_title : String,
-    val genre_ids : ArrayList<Int>,
-    val title: String,
-    val vote_average: Float,
-    val overview: String,
-    val release_date: String) : Parcelable {}
+    val title: String) : Parcelable {
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Film
+
+        if (!genre_ids.contentEquals(other.genre_ids)) return false
+        if (backdrop_path != other.backdrop_path) return false
+        if (title != other.title) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = genre_ids.contentHashCode()
+        result = 31 * result + backdrop_path.hashCode()
+        result = 31 * result + title.hashCode()
+        return result
+    }
+
+}

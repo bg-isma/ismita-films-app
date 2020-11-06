@@ -14,11 +14,9 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerInParent="true"
-                android:adjustViewBounds="true"
+                android:id="@+id/films_list_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:background="@color/cardview_dark_background"
                 android:src="@drawable/ic_launcher_background" />

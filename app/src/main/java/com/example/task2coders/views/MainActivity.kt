@@ -1,24 +1,26 @@
 package com.example.task2coders.views
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.OrientationHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.example.task2coders.BuildConfig
 import com.example.task2coders.models.FilmResponse
 import com.example.task2coders.R
 import com.example.task2coders.models.Film
-import com.example.task2coders.controllers.FilmList
+import com.example.task2coders.Adapters.FilmListAdapter
+import com.example.task2coders.models.Genre
+import com.example.task2coders.models.GenreResponse
+import com.example.task2coders.services.ApiService
 import com.example.task2coders.services.FilmService
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,27 +33,50 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val retrofit = Retrofit.Builder().baseUrl("https://api.themoviedb.org/").addConverterFactory(GsonConverterFactory.create()).build();
-        val filmService: FilmService = retrofit.create<FilmService>(FilmService::class.java)
+        val filmService = ApiService.init();
+        getTopFilms(filmService)
+        getFilmsGenre(filmService)
 
-        val result: Call<FilmResponse> = filmService.getAllFilms("0da2d6744b7dda175fe4aed86c1bf257");
-        result.enqueue(object : Callback<FilmResponse> {
-            override fun onFailure(call: Call<FilmResponse>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "ERROR", Toast.LENGTH_SHORT).show()
-            }
-            override fun onResponse(call: Call<FilmResponse>, response: Response<FilmResponse>) {
-                loadList(response.body()?.results ?: arrayListOf())
-            }
-        })
     }
 
-    @SuppressLint("WrongConstant")
-    fun loadList(films: ArrayList<Film>) {
-        filmList.layoutManager = LinearLayoutManager(this@MainActivity, OrientationHelper.HORIZONTAL, false)
-        filmList.adapter = FilmList(this@MainActivity, films) {
+    fun loadList(films: List<Film>, list: RecyclerView) {
+        list.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+        list.adapter = FilmListAdapter(this@MainActivity, films as ArrayList<Film>) {
             val intent = Intent(this@MainActivity, DetailActivity::class.java)
             intent.putExtra(INTENT_PARCELABLE, it)
             startActivity(intent)
         }
+    }
+
+    private fun getTopFilms(filmService: FilmService) {
+        filmService.getTopFilms(BuildConfig.imdbApikey).enqueue(object : Callback<FilmResponse> {
+            override fun onFailure(call: Call<FilmResponse>, t: Throwable) {}
+            override fun onResponse(call: Call<FilmResponse>, response: Response<FilmResponse>) {
+                loadList(response.body()?.results ?: arrayListOf(), top_films_list)
+            }
+        })
+    }
+
+    private fun getAllMovies(filmService: FilmService, genres: List<Genre>) {
+        filmService.getAllFilms(BuildConfig.imdbApikey, 2).enqueue(object : Callback<FilmResponse> {
+            override fun onFailure(call: Call<FilmResponse>, t: Throwable) {}
+            override fun onResponse(call: Call<FilmResponse>, response: Response<FilmResponse>) {
+                loadList(response.body()?.results?.filter{ it.genre_ids.indexOf(getGenreID(genres, "Romance")) !== -1 } ?: arrayListOf(), romance_films_list)
+                loadList(response.body()?.results?.filter{ it.genre_ids.indexOf(getGenreID(genres, "Science Fiction")) !== -1 } ?: arrayListOf(), science_fiction_films_list)
+            }
+        })
+    }
+
+    private fun getGenreID(genres: List<Genre>, genreType: String): Int? {
+        return genres.find { it.name.equals(genreType) }?.id
+    }
+
+    private fun getFilmsGenre(filmService: FilmService) {
+        filmService.getAllFilmsGenre(BuildConfig.imdbApikey).enqueue(object : Callback<GenreResponse> {
+            override fun onFailure(call: Call<GenreResponse>, t: Throwable) {}
+            override fun onResponse(call: Call<GenreResponse>, response: Response<GenreResponse>) {
+                response.body()?.genres?.let { getAllMovies(filmService, it) }
+            }
+        })
     }
 }
